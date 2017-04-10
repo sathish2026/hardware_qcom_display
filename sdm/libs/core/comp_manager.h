@@ -74,6 +74,7 @@ class CompManager : public DumpImpl {
 
  private:
   static const int kMaxThermalLevel = 3;
+  static const int kSafeModeThreshold = 4;
 
   void PrepareStrategyConstraints(Handle display_ctx, HWLayers *hw_layers);
 
@@ -103,6 +104,7 @@ class CompManager : public DumpImpl {
   HWResourceInfo hw_res_info_;
   ExtensionInterface *extension_intf_ = NULL;
   uint32_t max_layers_ = kMaxSDELayers;
+  uint32_t max_sde_ext_layers_ = 0;
 };
 
 }  // namespace sdm

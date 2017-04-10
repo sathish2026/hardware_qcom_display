@@ -92,6 +92,11 @@ int setMetaData(private_handle_t *handle, DispParamType paramType,
         case SET_VT_TIMESTAMP:
             data->vtTimeStamp = *((uint64_t *)param);
             break;
+#ifdef USE_COLOR_METADATA
+        case COLOR_METADATA:
+            data->color = *((ColorMetaData *)param);
+#endif
+            break;
         default:
             ALOGE("Unknown paramType %d", paramType);
             break;
@@ -157,6 +162,11 @@ int getMetaData(private_handle_t *handle, DispFetchParamType paramType,
         case GET_VT_TIMESTAMP:
             *((uint64_t *)param) = data->vtTimeStamp;
             break;
+#ifdef USE_COLOR_METADATA
+        case GET_COLOR_METADATA:
+            *((ColorMetaData *)param) = data->color;
+#endif
+            break;
         default:
             ALOGE("Unknown paramType %d", paramType);
             break;
@@ -194,6 +204,9 @@ int copyMetaData(struct private_handle_t *src, struct private_handle_t *dst) {
         dst->fd_metadata, 0);
     if (base_dst == reinterpret_cast<void*>(MAP_FAILED)) {
         ALOGE("%s: dst mmap() failed: error is %s!", __func__, strerror(errno));
+        if(munmap(base_src, size))
+            ALOGE("%s: failed to unmap src ptr %p, err %d", __func__,
+                                             (void*)base_src, errno);
         return -1;
     }
 

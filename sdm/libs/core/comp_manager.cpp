@@ -118,6 +118,7 @@ DisplayError CompManager::RegisterDisplay(DisplayType type,
   // resources for the added display is configured properly.
   if (!display_comp_ctx->is_primary_panel) {
     safe_mode_ = true;
+    max_sde_ext_layers_ = UINT32(Debug::GetExtMaxlayers());
   }
 
   DLOGV_IF(kTagCompManager, "registered display bit mask 0x%x, configured display bit mask 0x%x, " \
@@ -210,9 +211,13 @@ void CompManager::PrepareStrategyConstraints(Handle comp_handle, HWLayers *hw_la
   constraints->use_cursor = false;
   constraints->max_layers = max_layers_;
 
-  // Limit 2 layer SDE Comp if its not a Primary Display
+  // Limit 2 layer SDE Comp if its not a Primary Display.
+  // Safe mode is the policy for External display on a low end device.
   if (!display_comp_ctx->is_primary_panel) {
-    constraints->max_layers = 2;
+    bool low_end_hw = ((hw_res_info_.num_vig_pipe + hw_res_info_.num_rgb_pipe +
+                        hw_res_info_.num_dma_pipe) <= kSafeModeThreshold);
+    constraints->max_layers = max_sde_ext_layers_;
+    constraints->safe_mode = (low_end_hw && !hw_res_info_.separate_rotator) ? true : safe_mode_;
   }
 
   // If a strategy fails after successfully allocating resources, then set safe mode
