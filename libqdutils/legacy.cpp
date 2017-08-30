@@ -15,6 +15,7 @@
  */
 
 #include <ui/GraphicBuffer.h>
+#include <media/stagefright/MediaBuffer.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -64,6 +65,12 @@ void _ZN7android11BufferQueue17createBufferQueueEPNS_2spINS_22IGraphicBufferProd
 	_ZN7android11BufferQueue17createBufferQueueEPNS_2spINS_22IGraphicBufferProducerEEEPNS1_INS_22IGraphicBufferConsumerEEEb(
 		outProducer, outConsumer, consumerIsSurfaceFlinger);
 }
+
+int _ZNK7android11MediaBuffer8refcountEv(android::MediaBuffer *self)
+{
+	return self->refcount();
+}
+
 #ifdef __cplusplus
 }
 #endif

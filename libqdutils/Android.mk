@@ -26,8 +26,9 @@ LOCAL_SRC_FILES                 := qdMetaData.cpp
 LOCAL_CFLAGS                    := $(common_flags) -Wno-sign-conversion
 LOCAL_CFLAGS                    += -DLOG_TAG=\"DisplayMetaData\"
 ifeq ($(TARGET_USE_LEGACY_SUPPORT),true)
-LOCAL_SHARED_LIBRARIES          += libui libgui
-LOCAL_C_INCLUDES                += framework/native/include
+LOCAL_SHARED_LIBRARIES          += libui libgui libstagefright_foundation
+LOCAL_C_INCLUDES                += framework/native/include frameworks/av/include
+LOCAL_CFLAGS                    += -Wno-unused-private-field
 LOCAL_SRC_FILES                 += legacy.cpp
 endif
 LOCAL_MODULE_TAGS               := optional
