@@ -25,7 +25,11 @@ LOCAL_ADDITIONAL_DEPENDENCIES   := $(common_deps)
 LOCAL_SRC_FILES                 := qdMetaData.cpp
 LOCAL_CFLAGS                    := $(common_flags) -Wno-sign-conversion
 LOCAL_CFLAGS                    += -DLOG_TAG=\"DisplayMetaData\"
-
+ifeq ($(TARGET_USE_LEGACY_SUPPORT),true)
+LOCAL_SHARED_LIBRARIES          += libui libgui
+LOCAL_C_INCLUDES                += framework/native/include
+LOCAL_SRC_FILES                 += legacy.cpp
+endif
 LOCAL_MODULE_TAGS               := optional
 LOCAL_MODULE                    := libqdMetaData
 include $(BUILD_SHARED_LIBRARY)
